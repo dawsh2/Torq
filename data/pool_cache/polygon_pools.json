@@ -1,0 +1,65 @@
+{
+  "chain_id": 137,
+  "pools": [
+    {
+      "pool_address": "0x75f44b732e12d556f4398c57de621845fbd33c97",
+      "token0": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "token1": "0xf28164a485B0B2C90639E47b0f377b4a438a16B1",
+      "token0_symbol": "WMATIC",
+      "token1_symbol": "NDXT",
+      "token0_decimals": 18,
+      "token1_decimals": 18,
+      "protocol": "V2",
+      "fee_tier": 30,
+      "venue": "QuickSwap",
+      "discovered_at": 1756696598000000000,
+      "reserve0": "1000000000000000000000",
+      "reserve1": "1000000000000000000000"
+    },
+    {
+      "pool_address": "0x85f44b732e12d556f4398c57de621845fbd33c98",
+      "token0": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "token1": "0xf28164a485B0B2C90639E47b0f377b4a438a16B1",
+      "token0_symbol": "WMATIC",
+      "token1_symbol": "NDXT",
+      "token0_decimals": 18,
+      "token1_decimals": 18,
+      "protocol": "V2",
+      "fee_tier": 30,
+      "venue": "SushiSwap",
+      "discovered_at": 1756696598000000000,
+      "reserve0": "1100000000000000000000",
+      "reserve1": "900000000000000000000"
+    },
+    {
+      "pool_address": "0x6e7a5FAFcec6BB1e78bAE2A1F0B612012BF14827",
+      "token0": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "token1": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+      "token0_symbol": "WMATIC",
+      "token1_symbol": "USDC",
+      "token0_decimals": 18,
+      "token1_decimals": 6,
+      "protocol": "V2",
+      "fee_tier": 30,
+      "venue": "QuickSwap",
+      "discovered_at": 1756696598000000000,
+      "reserve0": "2000000000000000000000",
+      "reserve1": "2000000000"
+    },
+    {
+      "pool_address": "0xcd353F79d9FADe311fC3119B841e1f456b54e858",
+      "token0": "0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270",
+      "token1": "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",
+      "token0_symbol": "WMATIC",
+      "token1_symbol": "USDC",
+      "token0_decimals": 18,
+      "token1_decimals": 6,
+      "protocol": "V2",
+      "fee_tier": 30,
+      "venue": "SushiSwap",
+      "discovered_at": 1756696598000000000,
+      "reserve0": "2100000000000000000000",
+      "reserve1": "1900000000"
+    }
+  ]
+}

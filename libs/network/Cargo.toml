@@ -1,0 +1,61 @@
+[package]
+name = "network"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Internal dependencies
+types = { workspace = true }
+codec = { workspace = true }
+zerocopy = { workspace = true }
+
+# Use workspace dependencies
+chrono = { workspace = true }
+
+# Core networking
+tokio = { workspace = true }
+async-trait = { workspace = true }
+bytes = { workspace = true }
+futures = { workspace = true }
+
+# Error handling and logging
+thiserror = { workspace = true }
+anyhow = { workspace = true }
+tracing = { workspace = true }
+
+# Serialization
+serde = { workspace = true }
+serde_json = { workspace = true }
+serde_yaml = { workspace = true }
+bincode = { workspace = true }
+
+# Unix socket support
+nix = { workspace = true }
+
+# Utilities
+uuid = { workspace = true }
+byteorder = { workspace = true }
+rand = { workspace = true }
+regex = { workspace = true }
+lockfree = { workspace = true }
+parking_lot = { workspace = true }
+crc32fast = { workspace = true }
+
+# Performance monitoring
+prometheus = { version = "0.13", optional = true }
+metrics = { version = "0.23", optional = true }
+
+[dev-dependencies]
+types = { workspace = true }  # Only for tests/benchmarks
+criterion = "0.5"
+proptest = "1.7"
+tempfile = "3.8"
+test-log = "0.2"
+env_logger = "0.11"
+
+[features]
+default = []
+monitoring = ["prometheus", "metrics"]
+encryption = []
+message-queues = []
+compression = []

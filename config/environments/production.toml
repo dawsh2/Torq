@@ -1,0 +1,81 @@
+# Torq Production Environment Configuration
+# Production settings with security and performance optimizations
+
+[global]
+socket_dir = "/var/run/torq"
+log_dir = "/var/log/torq"
+log_level = "warn"
+pid_dir = "/var/run/torq"
+
+# Service-specific configurations
+[services]
+
+[services.market_data_relay]
+enabled = true
+health_port = 8001
+priority = 10
+# High-performance production settings
+
+[services.signal_relay]  
+enabled = true
+health_port = 8002
+priority = 20
+# Reliable signal distribution
+
+[services.execution_relay]
+enabled = true
+health_port = 8003
+priority = 30
+# Critical execution path
+
+[services.polygon_event_collector]
+enabled = false  # Disabled when using enriched mode
+health_port = 8004
+priority = 40
+
+[services.polygon_pool_metadata]
+enabled = false  # Disabled when using enriched mode
+health_port = 8010
+priority = 45
+
+[services.polygon_enriched]
+enabled = true  # Combined mode in production
+health_port = 8011
+priority = 40
+websocket = "${POLYGON_WS_URL}"  # From environment
+rpc_primary = "${POLYGON_RPC_URL}"
+cache_dir = "/var/lib/torq/polygon_pool_cache"
+rate_limit_per_sec = 5
+max_retries = 5
+
+[services.flash_arbitrage]
+enabled = true
+health_port = 8005
+priority = 50
+min_profit_usd = 10.0  # Higher threshold in production
+max_gas_price_gwei = 50  # Conservative gas limit
+pool_state_file = "/var/lib/torq/pool_state.json"
+
+[services.dashboard_websocket]
+enabled = true
+health_port = 8006
+priority = 60
+# Monitoring and visualization
+
+[services.kraken_collector]
+enabled = true
+health_port = 8007
+priority = 70
+# Traditional exchange data
+
+[services.binance_collector]
+enabled = true
+health_port = 8008
+priority = 80
+# High-volume exchange data
+
+[services.coinbase_collector]
+enabled = true
+health_port = 8009
+priority = 90
+# Institutional exchange data

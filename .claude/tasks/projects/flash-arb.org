@@ -1,0 +1,105 @@
+#+TITLE: Flash Arbitrage E2E - Minimal Working Implementation
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+
+* TODO [#A] Flash Arbitrage E2E Working           :flash-arbitrage:e2e:critical:
+  :PROPERTIES:
+  :ID:          FLASH-ARB-E2E-GOAL
+  :EFFORT:      12h
+  :ASSIGNED:    strategy-team
+  :DEADLINE:    <2025-09-02 Mon>
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Get flash arbitrage working end-to-end with minimal viable implementation.
+  **CURRENT BLOCKERS**: Arc serialization preventing compilation
+  **STRATEGY**: Get SOMETHING working first, perfect it later
+
+  **EXISTING COMPONENTS**:
+  - ✅ Flash arbitrage strategy code exists: services_v2/strategies/flash_arbitrage/
+  - ✅ Detector implementation: detector.rs
+  - ✅ Signal output: signal_output.rs  
+  - ✅ Relay consumer: relay_consumer.rs
+  - ✅ Executor: executor.rs
+  - ❌ BLOCKER: Cannot compile due to Arc<T> serialization errors
+
+** TODO [#A] Flash Arbitrage Compilation Fix     :compilation:critical:
+   :PROPERTIES:
+   :ID:          FLASH-ARB-001
+   :EFFORT:      2h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      fix/flash-arb-compile
+   :DEADLINE:    <2025-08-31 Sat>
+   :END:
+   Get flash arbitrage strategy to compile by working around Arc serialization issues.
+   **APPROACH**: Minimal changes to get compilation working, not perfect architecture
+   *** Acceptance Criteria
+   - [ ] Successfully builds: `cargo build --package flash-arbitrage-strategy`
+   - [ ] Binary can be executed: `cargo run --bin flash_arbitrage`
+   - [ ] No Arc serialization errors
+   - [ ] Can connect to relay consumers (basic smoke test)
+   - [ ] Profitability guards can be temporarily disabled for testing
+
+** TODO Test Design for Profitability Guards    :testing:tdd:financial-safety:
+   :PROPERTIES:
+   :ID:          SAFETY-001-TESTS
+   :EFFORT:      2h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      test/profitability-guards
+   :TRIGGER:     ids(SAFETY-001) todo!(NEXT)
+   :BLOCKER:     ids(FLASH-ARB-001)
+   :END:
+   Design comprehensive tests for profitability guard validation in flash arbitrage detector.
+   *** Acceptance Criteria (TDD Red Phase)
+   - [ ] Successfully builds: `cargo build --test`
+   - [ ] Tests for min_profit_usd guard enforcement
+   - [ ] Tests for gas_cost_limit validation
+   - [ ] Tests for max_slippage constraints
+   - [ ] Tests for profit_margin sanity bounds
+   - [ ] Edge case tests for extreme market conditions
+   - [ ] All tests initially fail (red phase)
+   - [ ] Test coverage for detector.rs lines 420-441
+
+** TODO [#A] Re-enable Profitability Guards           :financial-safety:critical:
+   :PROPERTIES:
+   :ID:          SAFETY-001
+   :EFFORT:      3h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      fix/profitability-guards
+   :DEADLINE:    <2025-08-28 Wed>
+   :BLOCKER:     ids(SAFETY-001-TESTS)
+   :END:
+   CRITICAL: Re-enable the 4 disabled profitability guards in flash arbitrage detector that were disabled for debugging.
+   **FINANCIAL RISK**: Current code generates signals for ALL arbitrage pairs without validation checks.
+   Location: services_v2/strategies/src/flash_arbitrage/detector.rs lines 420-441
+   *** Acceptance Criteria (TDD Green Phase)
+   - [ ] Successfully builds: `cargo build --release`
+   - [ ] All tests pass: `cargo test --package strategies`
+   - [ ] Passes code review
+   - [ ] All 4 profitability guards re-enabled
+   - [ ] min_profit_usd enforced (no signals below threshold)
+   - [ ] gas_cost_limit validated (reject expensive transactions)
+   - [ ] max_slippage constraints active
+   - [ ] profit_margin sanity bounds implemented
+   - [ ] Financial safety verified with real market data
+   - [ ] No false positive signals generated
+
+** TODO [#B] Basic E2E Smoke Test                :e2e:testing:
+   :PROPERTIES:
+   :ID:          FLASH-ARB-E2E-001
+   :EFFORT:      3h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      test/flash-arb-e2e
+   :BLOCKER:     ids(FLASH-ARB-001)
+   :END:
+   Create minimal end-to-end smoke test for flash arbitrage flow.
+   *** Acceptance Criteria
+   - [ ] Successfully builds and runs flash arbitrage binary
+   - [ ] Can connect to market data relay
+   - [ ] Can receive pool swap events
+   - [ ] Detector processes events without crashing
+   - [ ] Signal output can be observed (even if disabled by guards)
+   - [ ] Basic logging shows system is alive
+   - [ ] Can run for 30 seconds without panic

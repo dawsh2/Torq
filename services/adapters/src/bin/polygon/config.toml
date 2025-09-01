@@ -1,0 +1,55 @@
+# Polygon Collector Configuration
+# Unified collector configuration for WebSocket connectivity and relay output
+
+[websocket]
+# Primary WebSocket endpoint for real-time Polygon events (tested working with Python)
+url = "wss://polygon.drpc.org"
+
+# Fallback endpoints (will try in order if primary fails) 
+fallback_urls = [
+    "wss://polygon.gateway.tenderly.co",
+    "wss://polygon-bor-rpc.publicnode.com"
+]
+
+# Connection timeout for WebSocket establishment (milliseconds)
+connection_timeout_ms = 30000
+
+# Message timeout for WebSocket heartbeat/keep-alive (milliseconds)
+message_timeout_ms = 60000
+
+# Reconnection parameters
+base_backoff_ms = 1000
+max_backoff_ms = 30000
+max_reconnect_attempts = 10
+
+[relay]
+# Unix socket path for RelayOutput connection
+socket_path = "/tmp/torq/market_data.sock"
+
+# Relay domain for TLV message routing
+domain = "MarketData"
+
+# Source identifier for this collector in Protocol V2 messages
+source_id = 3
+
+[validation]
+# Runtime TLV validation duration (seconds)
+# Validates outgoing TLV messages for first N seconds after startup
+runtime_validation_seconds = 5
+
+# Enable comprehensive logging during validation period
+verbose_validation = true
+
+[monitoring]
+# Health check interval (seconds)
+health_check_interval_seconds = 10
+
+# Message statistics reporting interval
+stats_report_interval_seconds = 60
+
+# Performance warning thresholds
+max_processing_latency_ms = 35
+max_memory_usage_mb = 50
+
+# Event signatures and contract addresses now provided by libs/dex
+# This eliminates configuration drift and ensures ABI consistency

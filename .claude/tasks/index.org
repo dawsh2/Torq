@@ -1,0 +1,132 @@
+#+TITLE: Torq Active Tasks - Minimal Focus for Flash Arbitrage E2E
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+#+PROPERTY: ORDERED true
+
+# CRITICAL FOCUS: Get flash arbitrage working end-to-end
+# Strategy: Fix compilation first, get basic flow working, perfect later
+# Reorganized large tasks into focused project files in projects/ directory
+
+* NEXT [#A] Fix Flash Arbitrage Compilation      :flash-arbitrage:critical:blocking:
+  :PROPERTIES:
+  :ID:          IMMEDIATE-001
+  :EFFORT:      4h
+  :ASSIGNED:    backend-engineer
+  :DEADLINE:    <2025-08-31 Sat>
+  :END:
+  **CRITICAL BLOCKER**: Flash arbitrage cannot compile due to Arc serialization errors
+  
+  Current error: `the trait 'Deserialize<'_>' is not implemented for 'Arc<PositionUpdate>'`
+  Location: libs/types/src/messages.rs:88:20
+  
+  **MINIMAL APPROACH**: Get it compiling first, architectural fixes later
+  
+  *** Next Actions
+  - [ ] Remove Arc from serializable message types temporarily
+  - [ ] Or add serde feature flags to make Arc serializable
+  - [ ] Test basic compilation: `cargo build --package flash-arbitrage-strategy`
+  - [ ] Test binary execution: `cargo run --bin flash_arbitrage --help`
+  
+  **SUCCESS CRITERIA**: Flash arbitrage binary compiles and can start
+
+* TODO [#A] Flash Arbitrage Basic Smoke Test     :e2e:testing:
+  :PROPERTIES:
+  :ID:          IMMEDIATE-002
+  :EFFORT:      2h
+  :ASSIGNED:    backend-engineer
+  :BLOCKER:     ids(IMMEDIATE-001)
+  :DEADLINE:    <2025-09-01 Sun>
+  :END:
+  Get basic end-to-end flow working without perfection
+  
+  *** Next Actions
+  - [ ] Start flash arbitrage binary
+  - [ ] Verify it can connect to data sources
+  - [ ] Confirm it receives some events
+  - [ ] Check it doesn't immediately crash
+  - [ ] Profitability guards can be temporarily disabled for testing
+  
+  **SUCCESS CRITERIA**: System runs for 30 seconds processing events
+
+* TODO [#A] Re-enable Financial Safety Guards    :financial-safety:critical:
+  :PROPERTIES:
+  :ID:          IMMEDIATE-003
+  :EFFORT:      3h
+  :ASSIGNED:    backend-engineer
+  :BLOCKER:     ids(IMMEDIATE-002)
+  :DEADLINE:    <2025-09-02 Mon>
+  :END:
+  CRITICAL: Re-enable disabled profitability guards once basic flow working
+  
+  Location: services_v2/strategies/src/flash_arbitrage/detector.rs lines 420-441
+  **FINANCIAL RISK**: Current code may generate signals without validation
+  
+  *** Next Actions
+  - [ ] Identify the 4 disabled guards
+  - [ ] Write tests for guard behavior first (TDD)
+  - [ ] Re-enable guards with proper validation
+  - [ ] Test with real market data
+  
+  **SUCCESS CRITERIA**: No signals generated below profitability thresholds
+
+# ============================================================================
+# ORGANIZED TASKS: Moved to focused project files for better management
+# ============================================================================
+
+* REFERENCE [#C] Task Organization                :meta:organization:
+  :PROPERTIES:
+  :ID:          TASK-ORG-001
+  :EFFORT:      1h
+  :ASSIGNED:    scrum-leader
+  :END:
+  Large active.org (2258 lines) has been reorganized into focused project files:
+  
+  *** Project Files Created
+  - projects/build-fixes.org - Current build blockers and workspace issues
+  - projects/arc-types.org - Internal/Wire message architecture (Arc serialization fix)
+  - projects/flash-arb.org - Flash arbitrage E2E tasks
+  - projects/mycelium.org - Messaging library tasks (deferred)
+  - projects/cleanup.org - Code cleanup and migrations (deferred)
+  
+  *** Benefits
+  - Each file <500 lines for better management
+  - Clear focus areas and priorities
+  - Related tasks grouped together
+  - Easier to track progress by domain
+  
+  *** Priority Order
+  1. Fix compilation (Arc types issue)
+  2. Get basic flash arbitrage E2E working
+  3. Re-enable financial safety guards
+  4. Polish and architectural improvements later
+
+# ============================================================================
+# DEFERRED: These are important but not blocking flash arbitrage E2E
+# ============================================================================
+
+* DEFERRED [#B] Architectural Improvements       :architecture:deferred:
+  :PROPERTIES:
+  :ID:          DEFERRED-ARCH
+  :END:
+  These tasks are important but deferred until flash arbitrage E2E is operational:
+  - Internal/Wire message architecture (Arc serialization proper fix)
+  - Mycelium messaging library foundation
+  - Code generation macros
+  - Performance benchmarking
+  - Documentation system integration
+  
+  **Rationale**: Get working flow first, then optimize and perfect
+
+* DEFERRED [#C] Quality and Tooling             :quality:deferred:
+  :PROPERTIES:
+  :ID:          DEFERRED-QUALITY
+  :END:
+  Quality improvements deferred until basic functionality working:
+  - Unit test framework enhancements
+  - Directory structure linting
+  - Task management workflow improvements
+  - Post-refactor validation
+  
+  **Rationale**: Focus on getting something working before polishing

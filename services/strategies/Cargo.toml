@@ -1,0 +1,23 @@
+[package]
+name = "strategies"
+version = "0.1.0"
+edition = "2021"
+authors = ["Torq Team"]
+
+[dependencies]
+mev = { workspace = true }
+state-market = { workspace = true }
+
+# Core libraries
+codec = { workspace = true }
+types = { workspace = true }
+
+# Common external dependencies
+tokio = { workspace = true }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tracing = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+rust_decimal = { workspace = true }

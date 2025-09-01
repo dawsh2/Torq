@@ -1,0 +1,169 @@
+[workspace]
+members = [
+    # Core infrastructure
+    "libs/network",
+    
+    # Libraries
+    "libs/types",
+    "libs/codec",
+    "libs/config",
+    "libs/amm",
+    "libs/actors",
+    "libs/messaging/relays",
+    "libs/messaging/relays/core",
+    "libs/messaging/relays/domains/market_data",
+    "libs/messaging/relays/domains/execution", 
+    "libs/messaging/relays/domains/signal",
+    "libs/messaging/patterns/message_sink",
+    
+    # Services
+    "services/adapters",
+    "services/adapters/polygon/event_collector",
+    "services/adapters/polygon/pool_metadata",
+    "services/adapters/polygon/enriched",
+    "services/adapters/pool_metadata_adapter",
+    "services/adapters/coinbase_adapter",
+    "services/adapters/gas_price_collector",
+    "services/adapters/dex_utils",
+    "services/strategies",
+    "services/strategies/flash_arbitrage",
+    "services/observability/dashboard",
+    "services/observability/trace_collector",
+    "services/observability/health_check",
+    "services/strategies/mev",
+    "services/strategies/state",
+    
+    # Tools (removed - directory doesn't exist)
+    
+    # Tests
+    "tests/e2e",
+    "tests/architecture_validation",
+    
+    # Scripts
+    "scripts",
+]
+
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["Torq Team"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/torq/torq"
+
+[workspace.dependencies]
+# Async runtime
+tokio = { version = "1.42", features = ["full"] }
+async-trait = "0.1"
+futures = "0.3"
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+config-crate = "0.14"
+bincode = "1.3"
+
+# Error handling
+thiserror = "2.0"
+anyhow = "1.0"
+
+# Logging and monitoring
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Testing
+criterion = "0.5"
+
+# Time handling
+chrono = "0.4"
+proptest = "1.5"
+
+# Common utilities
+bytes = "1.9"
+hex = "0.4"
+once_cell = "1.0"
+dashmap = "6.1"
+rust_decimal = { version = "1.37", features = ["serde"] }
+rust_decimal_macros = "1.37"
+aquamarine = "0.5"
+parking_lot = "0.12"
+bytemuck = { version = "1.17", features = ["derive"] }
+zerocopy = { version = "0.7", features = ["derive"] }
+num_enum = "0.7"
+byteorder = "1.5"
+rand = "0.8"
+regex = "1.11"
+lockfree = "0.5"
+crc32fast = "1.4"
+paste = "1.0"
+web3 = "0.19"
+ethers = "2.0"
+ethers-core = "2.0"
+ethers-providers = "2.0"
+tungstenite = "0.20"
+tokio-tungstenite = { version = "0.20", features = ["native-tls", "connect"] }
+url = "2.4"
+clap = { version = "4.0", features = ["derive"] }
+serde_yaml = "0.9"
+crossbeam-channel = "0.5"
+reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+memmap2 = "0.9"
+nix = { version = "0.29", features = ["fs"] }
+prometheus = "0.13"
+metrics = "0.23"
+ethabi = "18.0"
+sha3 = "0.10"
+base64 = "0.21"
+uuid = { version = "1.4", features = ["v4", "serde"] }
+tempfile = "3.8"
+env_logger = "0.11"
+test-log = "0.2"
+tokio-test = "0.4"
+futures-util = "0.3"
+governor = "0.6"
+nonzero_ext = "0.3"
+rustdoc-json = "0.8"
+syn = { version = "2.0", features = ["full", "extra-traits"] }
+glob = "0.3"
+lazy_static = "1.4"
+toml = "0.8"
+
+# Internal workspace dependencies
+types = { path = "libs/types" }
+codec = { path = "libs/codec" }
+network = { path = "libs/network" }
+config = { path = "libs/config" }
+# state-core = { path = "libs/state/core" } # TODO: Fix missing state-core
+state-market = { path = "services/strategies/state" }
+amm = { path = "libs/amm" }
+dex = { path = "services/adapters/dex_utils" }
+mev = { path = "services/strategies/mev" }
+health-check = { path = "services/observability/health_check" }
+relays = { path = "libs/messaging/relays" }
+relay-core = { path = "libs/messaging/relays/core" }
+relay-execution = { path = "libs/messaging/relays/domains/execution" }
+relay-market-data = { path = "libs/messaging/relays/domains/market_data" }
+relay-signal = { path = "libs/messaging/relays/domains/signal" }
+message-sink = { path = "libs/messaging/patterns/message_sink" }
+messaging-actors = { path = "libs/actors" }
+adapter-service = { path = "services/adapters" }
+strategies = { path = "services/strategies" }
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+debug = false
+panic = 'abort'
+
+[profile.bench]
+inherits = "release"
+
+[profile.dev]
+opt-level = 0
+debug = true
+
+[profile.test]
+opt-level = 2
+debug = true

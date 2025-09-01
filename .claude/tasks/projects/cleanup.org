@@ -1,0 +1,82 @@
+#+TITLE: Code Cleanup and Migrations - Lower Priority
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+
+* TODO [#A] Task Migration from Previous Scrum System   :migration:critical:emergency:
+  :PROPERTIES:
+  :ID:          TASK-MIGRATION-GOAL
+  :EFFORT:      16h
+  :ASSIGNED:    scrum-leader
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Migrate and consolidate tasks from previous scrum system archives.
+  **STATUS**: In progress - this reorganization is part of this effort
+
+* TODO [#A] Post-Refactor Quality Validation            :validation:critical:
+  :PROPERTIES:
+  :ID:          POST-REFACTOR-VALIDATION-GOAL
+  :EFFORT:      32h
+  :ASSIGNED:    qa-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Validate system quality after major refactoring efforts.
+  **STATUS**: Defer until basic functionality working
+
+* TODO [#B] Performance Benchmarking Suite     :performance:testing:
+  :PROPERTIES:
+  :ID:          PERF-BENCHMARK-GOAL
+  :EFFORT:      16h
+  :ASSIGNED:    perf-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Create comprehensive performance benchmarking suite.
+  **STATUS**: Important but not blocking flash arbitrage
+
+* TODO [#B] Unit Test Framework Enhancement             :testing:framework:
+  :PROPERTIES:
+  :ID:          UNIT-TEST-FRAMEWORK-GOAL
+  :EFFORT:      20h
+  :ASSIGNED:    testing-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Enhance unit testing framework and coverage.
+  **STATUS**: Improve after basic E2E working
+
+* TODO [#C] Documentation System Integration     :docs:infrastructure:automation:
+  :PROPERTIES:
+  :ID:          DOCS-INTEGRATION-GOAL
+  :EFFORT:      24h
+  :ASSIGNED:    docs-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Integrate documentation system with infrastructure.
+  **STATUS**: Lower priority maintenance task
+
+* TODO [#B] Directory Structure Linter            :tooling:architecture:quality:
+  :PROPERTIES:
+  :ID:          DIR-LINTER-GOAL
+  :EFFORT:      8h
+  :ASSIGNED:    tooling-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Create tooling to validate and maintain directory structure.
+  **STATUS**: Quality improvement, not urgent
+
+* WORKFLOW [#C] Task Management Improvements      :workflow:meta:recycle-bin:
+  :PROPERTIES:
+  :ID:          WORKFLOW-IMPROVEMENTS-GOAL
+  :EFFORT:      12h
+  :ASSIGNED:    workflow-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Improve task management workflow and tooling.
+  **STATUS**: Meta work, ongoing improvement

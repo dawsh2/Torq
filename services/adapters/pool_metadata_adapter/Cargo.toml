@@ -1,0 +1,43 @@
+[package]
+name = "pool-metadata-adapter"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Workspace dependencies
+adapter-service = { workspace = true }
+types = { workspace = true }
+codec = { workspace = true }
+state-market = { workspace = true }
+
+# Async runtime
+tokio = { workspace = true, features = ["full"] }
+async-trait = { workspace = true }
+
+# Web3 for RPC calls
+web3 = { workspace = true }
+ethers = { workspace = true }
+ethers-core = { workspace = true }
+
+# Data handling
+serde = { workspace = true, features = ["derive"] }
+serde_json = { workspace = true }
+dashmap = { workspace = true }
+
+# Logging
+tracing = { workspace = true }
+
+# Error handling
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+
+# Utilities
+hex = { workspace = true }
+parking_lot = { workspace = true }
+crossbeam-channel = { workspace = true }
+memmap2 = { workspace = true }
+zerocopy = { workspace = true }
+
+[[bin]]
+name = "pool_metadata_service"
+path = "src/bin/pool_metadata_service.rs"

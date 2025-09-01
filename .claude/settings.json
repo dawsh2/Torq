@@ -1,0 +1,121 @@
+{
+  "hooks": {
+    "pre_conversation": {
+      "script": "./tools/org_tasks.sh validate_active_tasks",
+      "description": "Validate active task status and remind about execution standards"
+    },
+    "post_file_edit": {
+      "script": "./tools/enforce_status_updates.sh",
+      "description": "Check if task status updates are needed when editing task files",
+      "file_patterns": [
+        ".claude/tasks/active.org",
+        ".claude/tasks/**/*.org",
+        ".claude/tasks/**/*.md"
+      ]
+    },
+    "pre_git_commit": {
+      "script": "./tools/validate_task_completion.sh",
+      "description": "Ensure task status is properly updated before committing code",
+      "run_on": [
+        "src/**",
+        "libs/**",
+        "services/**",
+        "network/**"
+      ]
+    },
+    "post_task_start": {
+      "script": "./tools/remind_status_update.sh",
+      "description": "Remind agents to update task status when starting work"
+    },
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/user-messages.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit|Task|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/sessions-enforce.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Task",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/task-transcript-link.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/post-tool-use.py"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "startup|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/session-start.py"
+          }
+        ]
+      }
+    ]
+  },
+  "task_management": {
+    "primary_system": "org-mode",
+    "task_directory": ".claude/tasks/",
+    "use_dag_dependencies": true,
+    "scrum_leader_enabled": true,
+    "cc_sessions_compatibility": true
+  },
+  "task_execution_standards": {
+    "mandatory_status_updates": true,
+    "tdd_workflow_required": true,
+    "performance_regression_checks": true,
+    "financial_safety_validation": true,
+    "daic_workflow": true
+  },
+  "compliance_enforcement": {
+    "block_commits_without_status_update": true,
+    "require_test_before_implementation": true,
+    "validate_acceptance_criteria": true,
+    "enforce_branch_naming": true
+  },
+  "notifications": {
+    "status_update_reminders": {
+      "frequency": "every_file_edit",
+      "message": "🚨 REMINDER: Update task status (TODO → IN_PROGRESS → COMPLETE) in active.org"
+    },
+    "tdd_compliance": {
+      "trigger": "implementation_without_tests",
+      "message": "⚠️ TDD VIOLATION: Write tests BEFORE implementation code!"
+    },
+    "performance_alerts": {
+      "trigger": "benchmark_regression",
+      "message": "🔥 PERFORMANCE REGRESSION: >1M msg/s target not met!"
+    }
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "$CLAUDE_PROJECT_DIR/.claude/statusline-script.sh",
+    "padding": 0
+  }
+}

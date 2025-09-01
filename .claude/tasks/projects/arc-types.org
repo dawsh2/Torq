@@ -1,0 +1,108 @@
+#+TITLE: Arc Serialization Fix - Internal/Wire Message Architecture
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+
+* TODO [#A] Internal/Wire Message Architecture      :build:critical:types:architecture:
+  :PROPERTIES:
+  :ID:          ARC-SERIALIZATION-GOAL
+  :EFFORT:      20h
+  :ASSIGNED:    backend-team
+  :DEADLINE:    <2025-08-30 Sat>
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Implement Internal/Wire message separation pattern to eliminate Arc serialization issues.
+  **ARCHITECTURAL DECISION**: Separate internal (Arc<T> for thread-safety) from wire (plain T for IPC) representations.
+  **CURRENT STATE**: 24 types need Internal/Wire separation pattern. Arc serialization completely eliminated at IPC boundaries.
+
+  **CRITICAL BLOCKER**: Flash arbitrage cannot compile due to Arc serialization errors:
+  ```
+  error[E0277]: the trait `Deserialize<'_>` is not implemented for `Arc<PositionUpdate>`
+  --> libs/types/src/messages.rs:88:20
+  ```
+
+** TODO Test Design for Internal/Wire Pattern     :testing:tdd:architecture:
+   :PROPERTIES:
+   :ID:          ARC-001-TESTS
+   :EFFORT:      3h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      test/internal-wire-pattern
+   :TRIGGER:     ids(ARC-001) todo!(NEXT)
+   :END:
+   Design tests for Internal/Wire message separation pattern.
+   *** Acceptance Criteria (TDD Red Phase)
+   - [ ] Successfully builds: `cargo build --test`
+   - [ ] Tests for Internal message types with Arc<T> for thread-safety
+   - [ ] Tests for Wire message types without Arc for IPC serialization
+   - [ ] Tests for conversion traits: From<&Internal> for Wire
+   - [ ] Tests for zerocopy compatibility on wire types only
+   - [ ] Tests for process boundary message conversion
+   - [ ] Performance benchmarks: conversion overhead <2μs
+   - [ ] All tests initially fail (red phase)
+
+** TODO [#A] Internal/Wire Pattern Implementation   :architecture:implementation:critical:
+   :PROPERTIES:
+   :ID:          ARC-001
+   :EFFORT:      6h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      feat/internal-wire-pattern
+   :DEADLINE:    <2025-08-30 Sat>
+   :BLOCKER:     ids(ARC-001-TESTS)
+   :END:
+   Implement Internal/Wire message separation for all message types.
+   **ARCHITECTURAL PATTERN**: Internal (Arc<T> for threads) + Wire (T for IPC) + conversion traits
+   *** Acceptance Criteria (TDD Green Phase)
+   - [ ] Successfully builds: `cargo build --release`
+   - [ ] All tests pass: `cargo test --package types`
+   - [ ] Passes code review
+   - [ ] Internal types use Arc<T> for thread-safe sharing within processes
+   - [ ] Wire types use plain T for IPC serialization (no Arc)
+   - [ ] Conversion traits implemented: From<&Internal> for Wire
+   - [ ] Zerocopy compatibility maintained for wire types
+   - [ ] Arc never crosses process boundaries (IPC)
+   - [ ] Performance validated: <2μs conversion overhead
+   - [ ] All 24 message types follow Internal/Wire pattern
+
+** TODO Test Design for Code Generation Macro    :testing:tdd:codegen:
+   :PROPERTIES:
+   :ID:          ARC-002-TESTS
+   :EFFORT:      3h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      test/internal-wire-codegen
+   :BLOCKER:     ids(ARC-001)
+   :TRIGGER:     ids(ARC-002) todo!(NEXT)
+   :END:
+   Design tests for code generation macro for Internal/Wire message pairs.
+   *** Acceptance Criteria (TDD Red Phase)
+   - [ ] Successfully builds: `cargo build --test`
+   - [ ] Tests for macro-generated Internal types with Arc<T>
+   - [ ] Tests for macro-generated Wire types without Arc
+   - [ ] Tests for auto-generated From<&Internal> for Wire traits
+   - [ ] Tests for all domain types: Market, Signal, Execution
+   - [ ] Tests for nested struct handling in macro
+   - [ ] Tests for macro error cases and edge conditions
+   - [ ] All tests initially fail (red phase)
+
+** TODO [#A] Code Generation Macro for Internal/Wire :codegen:implementation:critical:
+   :PROPERTIES:
+   :ID:          ARC-002
+   :EFFORT:      8h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      feat/internal-wire-codegen
+   :DEADLINE:    <2025-08-30 Sat>
+   :BLOCKER:     ids(ARC-002-TESTS)
+   :END:
+   Create code generation macro to automate Internal/Wire message pair creation.
+   **TARGET**: Macro generates Internal (Arc<T>) + Wire (T) + conversions for all 24 message types
+   *** Acceptance Criteria (TDD Green Phase)
+   - [ ] Successfully builds: `cargo build --release --all`
+   - [ ] All tests pass: `cargo test --package types`
+   - [ ] Passes code review
+   - [ ] Macro generates Internal types with Arc<T> fields
+   - [ ] Macro generates Wire types with plain T fields
+   - [ ] Macro generates From<&Internal> for Wire conversion traits
+   - [ ] All 24 message types use macro: PoolSwapEvent, QuoteUpdate, etc.
+   - [ ] Performance maintained: <2μs conversion overhead
+   - [ ] Clean generated code with proper documentation

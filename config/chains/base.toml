@@ -1,0 +1,68 @@
+# Base Chain Configuration
+# Chain-specific settings for Base (Coinbase L2)
+
+[chain]
+name = "base"
+chain_id = 8453
+native_token = "ETH"
+native_decimals = 18
+block_time_sec = 2
+
+[rpc]
+primary = "https://mainnet.base.org"
+fallback = [
+    "https://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}",
+    "https://base.publicnode.com",
+    "https://base.drpc.org"
+]
+max_retries = 3
+timeout_ms = 5000
+rate_limit_per_sec = 10
+
+[websocket]
+primary = "wss://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+fallback = [
+    "wss://base.publicnode.com",
+    "wss://base.drpc.org"
+]
+
+[dex]
+[dex.uniswap_v3]
+enabled = true
+factory = "0x33128a8fC17869897dcE68Ed026d694621f6FDfD"
+quoter = "0x3d4e44Eb1374240CE5F1B871ab261CD16335B76a"
+
+[dex.baseswap]
+enabled = true
+factory = "0xFDa619b6d20975be80A10332cD39b9a4b0FAa8BB"
+
+[dex.aerodrome]
+enabled = true
+factory = "0x420DD381b31aEf6683db6B902084cB0FFECe40Da"
+
+[tokens]
+[tokens.WETH]
+address = "0x4200000000000000000000000000000000000006"
+decimals = 18
+symbol = "WETH"
+
+[tokens.USDC]
+address = "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913"
+decimals = 6
+symbol = "USDC"
+
+[tokens.DAI]
+address = "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb"
+decimals = 18
+symbol = "DAI"
+
+[tokens.USDT]
+address = "0xfde4C96c8593536E31F229EA8f37b2ADa2699bb2"
+decimals = 6
+symbol = "USDT"
+
+[gas]
+max_price_gwei = 5  # L2 gas prices
+priority_fee_gwei = 0.05
+gas_limit_swap = 250000
+gas_limit_arbitrage = 500000

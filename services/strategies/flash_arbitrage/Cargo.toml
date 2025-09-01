@@ -1,0 +1,35 @@
+[package]
+name = "flash-arbitrage-strategy"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "flash_arbitrage"
+path = "src/main.rs"
+
+[dependencies]
+torq-strategy-shared = { path = "../shared" }
+state-market = { path = "../state" }
+codec = { path = "../../../libs/codec" }
+types = { path = "../../../libs/types" }
+torq-amm = { path = "../../../libs/amm" }
+network = { workspace = true }
+adapter-service = { path = "../../adapters" }
+zerocopy = "0.7"
+reqwest = "0.11"
+
+# Strategy-specific dependencies
+tokio = { version = "1.42", features = ["full"] }
+async-trait = "0.1"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+thiserror = "2.0"
+rust_decimal = { version = "1.0", features = ["macros"] }
+rust_decimal_macros = "1.0"
+parking_lot = "0.12"
+ethers = "2.0"
+hex = "0.4"
+url = "2.5"

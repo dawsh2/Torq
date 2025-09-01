@@ -1,0 +1,192 @@
+# Torq Services Configuration
+# This file defines the service topology and connection endpoints
+# Environment-specific overrides can be placed in config/environments/
+
+[global]
+# Global settings that apply to all services
+socket_dir = "/tmp/torq"
+log_level = "info"
+enable_metrics = true
+
+# ============================================================================
+# RELAY SERVICES
+# ============================================================================
+
+[services.market_data_relay]
+type = "relay"
+socket = "unix:///tmp/torq/market_data.sock"
+max_clients = 100
+buffer_size = 65536
+description = "High-throughput relay for enriched market events"
+
+[services.signal_relay]
+type = "relay"
+socket = "unix:///tmp/torq/signals.sock"
+max_clients = 50
+buffer_size = 32768
+description = "Relay for arbitrage signals and execution commands"
+
+[services.execution_relay]
+type = "relay"
+socket = "unix:///tmp/torq/execution.sock"
+max_clients = 10
+buffer_size = 16384
+description = "Relay for transaction execution coordination"
+
+# ============================================================================
+# POLYGON CHAIN SERVICES
+# ============================================================================
+
+[services.polygon_event_collector]
+type = "adapter"
+chain = "polygon"
+chain_id = 137
+websocket = "wss://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+output = "unix:///tmp/torq/polygon_raw.sock"
+description = "Collects raw DEX events from Polygon"
+
+[services.polygon_pool_metadata]
+type = "enrichment"
+chain = "polygon"
+chain_id = 137
+input = "unix:///tmp/torq/polygon_raw.sock"
+output = "unix:///tmp/torq/market_data.sock"
+rpc_primary = "https://polygon-rpc.com"
+rpc_fallback = ["https://rpc-mainnet.matic.network", "https://polygon-mainnet.g.alchemy.com/v2/demo"]
+cache_dir = "./data/polygon_pool_cache"
+rate_limit_per_sec = 5
+max_retries = 3
+retry_interval_sec = 30
+unenrichable_strategy = "drop"  # Options: drop, publish_defaults, queue
+description = "Enriches Polygon events with pool metadata"
+
+[services.polygon_enriched]
+type = "adapter"
+chain = "polygon"
+chain_id = 137
+mode = "combined"  # Combined event collection + enrichment
+websocket = "wss://polygon-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+output = "unix:///tmp/torq/market_data.sock"
+rpc_primary = "https://polygon-rpc.com"
+cache_dir = "./data/polygon_pool_cache"
+description = "Combined Polygon adapter with integrated enrichment"
+
+# ============================================================================
+# ARBITRUM CHAIN SERVICES (Future)
+# ============================================================================
+
+[services.arbitrum_event_collector]
+type = "adapter"
+chain = "arbitrum"
+chain_id = 42161
+enabled = false  # Not yet implemented
+websocket = "wss://arb-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+output = "unix:///tmp/torq/arbitrum_raw.sock"
+description = "Collects raw DEX events from Arbitrum"
+
+[services.arbitrum_pool_metadata]
+type = "enrichment"
+chain = "arbitrum"
+chain_id = 42161
+enabled = false  # Not yet implemented
+input = "unix:///tmp/torq/arbitrum_raw.sock"
+output = "unix:///tmp/torq/market_data.sock"
+rpc_primary = "https://arb1.arbitrum.io/rpc"
+cache_dir = "./data/arbitrum_pool_cache"
+description = "Enriches Arbitrum events with pool metadata"
+
+# ============================================================================
+# BASE CHAIN SERVICES (Future)
+# ============================================================================
+
+[services.base_event_collector]
+type = "adapter"
+chain = "base"
+chain_id = 8453
+enabled = false  # Not yet implemented
+websocket = "wss://base-mainnet.g.alchemy.com/v2/${ALCHEMY_KEY}"
+output = "unix:///tmp/torq/base_raw.sock"
+description = "Collects raw DEX events from Base"
+
+[services.base_pool_metadata]
+type = "enrichment"
+chain = "base"
+chain_id = 8453
+enabled = false  # Not yet implemented
+input = "unix:///tmp/torq/base_raw.sock"
+output = "unix:///tmp/torq/market_data.sock"
+rpc_primary = "https://mainnet.base.org"
+cache_dir = "./data/base_pool_cache"
+description = "Enriches Base events with pool metadata"
+
+# ============================================================================
+# STRATEGY SERVICES
+# ============================================================================
+
+[services.flash_arbitrage]
+type = "strategy"
+market_data_input = "unix:///tmp/torq/market_data.sock"
+signal_output = "unix:///tmp/torq/signals.sock"
+execution_output = "unix:///tmp/torq/execution.sock"
+pool_state_file = "./data/pool_state.json"
+min_profit_usd = 1.0
+max_gas_price_gwei = 100
+description = "Flash arbitrage detection and signal generation"
+
+# ============================================================================
+# MONITORING & DASHBOARD
+# ============================================================================
+
+[services.dashboard]
+type = "monitoring"
+websocket_port = 8766
+market_data_input = "unix:///tmp/torq/market_data.sock"
+signal_input = "unix:///tmp/torq/signals.sock"
+static_files = "./dashboard/static"
+description = "Web dashboard for system monitoring"
+
+[services.metrics_collector]
+type = "monitoring"
+prometheus_port = 9090
+enabled = false  # Not yet implemented
+description = "Prometheus metrics exporter"
+
+# ============================================================================
+# DEPLOYMENT MODES
+# ============================================================================
+
+[deployment]
+# Default deployment mode
+# Options: "separate" (modular services) or "enriched" (combined adapters)
+mode = "separate"
+
+# Services to start for each mode
+[deployment.separate]
+services = [
+    "market_data_relay",
+    "signal_relay",
+    "polygon_event_collector",
+    "polygon_pool_metadata",
+    "flash_arbitrage",
+    "dashboard"
+]
+
+[deployment.enriched]
+services = [
+    "market_data_relay",
+    "signal_relay",
+    "polygon_enriched",  # Combined adapter
+    "flash_arbitrage",
+    "dashboard"
+]
+
+# ============================================================================
+# FEATURE FLAGS
+# ============================================================================
+
+[features]
+enable_arbitrum = false
+enable_base = false
+enable_metrics = false
+enable_execution = false
+debug_mode = false

@@ -1,0 +1,22 @@
+[package]
+name = "polygon-pool-metadata"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "polygon_pool_metadata"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+anyhow = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+hex = "0.4"
+clap = { version = "4.0", features = ["derive"] }
+
+# Internal dependencies
+types = { path = "../../../../libs/types" }
+codec = { path = "../../../../libs/codec" }
+pool-metadata-adapter = { path = "../../pool_metadata_adapter" }
+config = { path = "../../../../libs/config" }

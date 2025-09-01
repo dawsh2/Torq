@@ -1,0 +1,20 @@
+[package]
+name = "polygon-enriched"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "polygon_enriched"
+path = "src/main.rs"
+
+[dependencies]
+# Import both adapters as libraries
+polygon-adapter = { path = "../event_collector" }
+pool-metadata-adapter = { path = "../../pool_metadata_adapter" }
+
+# Common deps
+tokio = { workspace = true }
+tracing = { workspace = true }
+types = { workspace = true }
+codec = { workspace = true }
+anyhow = { workspace = true }

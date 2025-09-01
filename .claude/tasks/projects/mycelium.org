@@ -1,0 +1,61 @@
+#+TITLE: Mycelium Messaging Library - Transport Layer
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+
+* TODO [#A] Mycelium Messaging Library Foundation       :mycelium:critical:messaging:
+  :PROPERTIES:
+  :ID:          MYCELIUM-FOUNDATION-GOAL
+  :EFFORT:      40h
+  :ASSIGNED:    messaging-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Create the foundational messaging library architecture for the system.
+  **VISION**: Pure transport library handling IPC, message routing, and broker capabilities
+  **PRIORITY**: Defer until flash arbitrage E2E is working
+
+** TODO [#A] Mycelium Broker Platform                    :mycelium:broker:platform:
+  :PROPERTIES:
+  :ID:          MYCELIUM-BROKER-GOAL  
+  :EFFORT:      60h
+  :ASSIGNED:    platform-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Build the broker platform for message distribution and routing.
+  **STATUS**: Lower priority until core flash arbitrage functionality working
+
+** TODO [#B] Project Mycelium - Pure Messaging Library    :mycelium:messaging:transport:
+  :PROPERTIES:
+  :ID:          MYCELIUM-PURE-GOAL
+  :EFFORT:      80h
+  :ASSIGNED:    architecture-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Develop pure messaging library with transport abstraction.
+  **DECISION**: Defer major architecture work until basic E2E flow operational
+
+** TODO [#C] Mycelium Library Extraction          :architecture:messaging:library:
+  :PROPERTIES:
+  :ID:          MYCELIUM-EXTRACT-GOAL
+  :EFFORT:      24h
+  :ASSIGNED:    refactor-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Extract messaging components into standalone mycelium library.
+  **STATUS**: Nice-to-have, defer until flash arbitrage working
+
+** TODO [#C] Lightweight Actor Runtime               :actors:tokio:intraprocess:
+  :PROPERTIES:
+  :ID:          ACTOR-RUNTIME-GOAL
+  :EFFORT:      32h
+  :ASSIGNED:    runtime-team
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Implement lightweight actor runtime for intraprocess communication.
+  **STATUS**: Future enhancement, not required for MVP

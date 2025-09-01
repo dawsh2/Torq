@@ -1,0 +1,66 @@
+[package]
+name = "torq-e2e-tests"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "e2e_runner"
+path = "src/main.rs"
+
+[dependencies]
+
+# Adapters and strategies
+adapter-service = { workspace = true }
+# torq-dashboard-websocket = { path = "../../services/observability/dashboard" }
+strategies = { workspace = true }
+
+# Relays
+relays = { workspace = true }
+
+# Protocol and transport layers
+types = { workspace = true }
+network = { workspace = true }
+codec = { workspace = true }
+anyhow = "1.0"
+
+# Testing utilities
+assert_matches = "1.5"
+async-trait = "0.1"
+bytes = "1.0"
+
+# Time utilities
+chrono = { version = "0.4", features = ["serde"] }
+
+# CLI and async traits
+clap = { version = "4.0", features = ["derive"] }
+ethabi = "18.0"
+futures-util = "0.3"
+hex = "0.4"
+once_cell = "1.0"
+
+# Utilities
+rand = "0.8"
+
+# HTTP client for testing dashboard
+reqwest = { version = "0.12", features = ["json"] }
+
+# Decimal precision
+rust_decimal = { version = "1.0", features = ["serde"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tempfile = "3.0"
+# Core testing
+tokio = { version = "1.0", features = ["full"] }
+tokio-test = "0.4"
+
+# WebSocket testing
+tokio-tungstenite = "0.24"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-test = "0.2"
+uuid = { version = "1.0", features = ["v4"] }
+web3 = "0.19"
+zerocopy = "0.7"
+
+[dev-dependencies]
+criterion = "0.5"

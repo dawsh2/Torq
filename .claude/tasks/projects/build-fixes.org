@@ -1,0 +1,82 @@
+#+TITLE: Build System Fixes - Critical Blockers
+#+TODO: TODO NEXT IN-PROGRESS | DONE CANCELLED
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+
+* IN-PROGRESS [#A] Fix Cargo Build Errors                :build:critical:blocking:
+  :PROPERTIES:
+  :ID:          BUILD-FIX-GOAL
+  :EFFORT:      8h
+  :ASSIGNED:    dev-team
+  :DEADLINE:    <2025-08-28 Wed>
+  :BLOCKER:     children
+  :TRIGGER:     children todo!(NEXT)
+  :END:
+  Critical: Fix all cargo build errors blocking development.
+  
+  **PROGRESS UPDATE [2025-08-29]**: Network module build errors COMPLETED (38 fixes)
+  - ✅ Fixed all 38 compile errors in network module
+  - ✅ Added missing dependencies (byteorder, rand, serde_yaml, parking_lot, regex, lockfree)
+  - ✅ Fixed module structure and import paths  
+  - ✅ Corrected API signatures and async/await issues
+  - ✅ Added missing enum variants and trait derives
+  - ✅ Implemented validation methods
+  
+  **CURRENT BLOCKER**: Arc serialization issues in types package
+  - 24 compilation errors related to `Arc<T>` serialization
+  - Flash arbitrage strategy cannot compile due to types dependency
+  
+  **CRITICAL**: All agents working on this MUST read @.claude/docs/TASK_EXECUTION_STANDARDS.md
+
+** DONE Test Design for Workspace Dependencies     :testing:tdd:dependencies:
+CLOSED: [2025-08-27 Wed 20:12]
+   :PROPERTIES:
+   :ID:          BUILD-001-TESTS
+   :EFFORT:      1h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      test/workspace-deps
+   :TRIGGER:     ids(BUILD-001) todo!(NEXT)
+   :END:
+   Design tests to verify all workspace dependencies resolve correctly.
+
+** DONE Fix Missing rust_decimal_macros Dependency :dependencies:workspace:
+CLOSED: [2025-08-28 Wed 13:15]
+   :PROPERTIES:
+   :ID:          BUILD-001
+   :EFFORT:      1h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      fix/rust-decimal-macros
+   :BLOCKER:     ids(BUILD-001-TESTS)
+   :END:
+   Add missing rust_decimal_macros to workspace dependencies.
+
+** DONE Network Module Compile Errors Fix       :network:build:completed:
+CLOSED: [2025-08-29 Thu 14:30]
+   :PROPERTIES:
+   :ID:          BUILD-NETWORK-001
+   :EFFORT:      4h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      fix/rust-decimal-macros
+   :END:
+   Fix all 38 compile errors in network module - COMPLETED.
+
+** TODO Fix Workspace State Dependencies        :workspace:dependencies:
+   :PROPERTIES:
+   :ID:          BUILD-WORKSPACE-001
+   :EFFORT:      2h
+   :ASSIGNED:    backend-engineer
+   :BRANCH:      fix/workspace-state-deps
+   :BLOCKER:     ids(BUILD-NETWORK-001)
+   :END:
+   Fix workspace dependency issues caused by state-core deletion.
+   *** Current Error
+   ```
+   failed to load manifest for dependency `state-core`
+   failed to read `/Users/daws/alphapulse/backend_v2/libs/state/core/Cargo.toml`
+   ```
+   *** Acceptance Criteria
+   - [ ] Successfully builds: `cargo build --release --all`
+   - [ ] Workspace member dependencies resolved
+   - [ ] No references to deleted libs/state/core remain
+   - [ ] Flash arbitrage strategy can compile

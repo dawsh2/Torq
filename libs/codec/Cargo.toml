@@ -1,0 +1,25 @@
+[package]
+name = "codec"
+version = "0.1.0"
+edition = "2021"
+description = "Torq protocol codec - encoding/decoding rules and message construction"
+
+[dependencies]
+# Core type definitions  
+types = { path = "../types" }
+bytemuck = { version = "1.17", features = ["derive"] }
+crc32fast = "1.4"
+hex = "0.4"
+num_enum = "0.7"
+serde = { version = "1.0", features = ["derive"] }
+
+# Only depend on essential dependencies - no network dependencies
+thiserror = "1.0"
+tokio = { version = "1.0", features = ["sync"] }
+tracing = "0.1"
+zerocopy = { version = "0.7", features = ["derive"] }
+hex-literal = "0.4"
+
+[dev-dependencies]
+criterion = "0.5"
+tokio-test = "0.4"
